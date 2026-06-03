@@ -1,2 +1,5 @@
 .DS_Store
 .claude/settings.local.json
+
+# Generated run output (sample/test decks) — not part of the skill
+output/
