@@ -1,18 +1,46 @@
 # product-naming — a Claude Code naming skill
 
-Names products, brands, apps, SaaS, features, and open-source projects by orchestrating a **panel of subagents** modeled on the top US naming firms, then screening availability and delivering a ranked shortlist with rationale — optionally as an interactive flip-card deck.
+Names products, brands, apps, and ventures by orchestrating a **panel of subagents** — modeled on the top US naming firms plus founder & moonshot playbooks — then screening availability and delivering a ranked shortlist with rationale, optionally as an interactive flip-card deck.
 
 ![Ranked name candidates rendered as flip cards with a studio explorer](docs/cover.png)
 
 ## How it works
 
-A panel of subagents, orchestrated by `SKILL.md` through five phases (**brief → generate → evaluate → screen → synthesize**):
+`SKILL.md` orchestrates the panel through five phases: **brief → generate → evaluate → screen → synthesize.** The orchestrator runs in the main conversation and spawns the subagents in parallel.
 
-- **6 generators** — five modeled on top naming firms (`namer-lexicon`, `namer-catchword`, `namer-tanj`, `namer-landor`, `namer-igor`), each carrying that firm's distilled framework + case studies, plus `namer-essence`, an on-the-nose baseline (core verbs + feelings) so the obvious word is never silently skipped.
-- **3 first-principles evaluators** — `name-phonetics` (sound symbolism), `name-linguistics` (construction/pronounceability), `name-psychology` (fluency/distinctiveness/aging).
-- **1 availability screener** — `name-availability` (domain / trademark / cross-language signals).
+### 1. Generators — nine schools brainstorm at once
 
-Candidates are scored on a composite rubric (with a cross-school agreement bonus and an essence-coverage gate), screened, and ranked. The orchestrator runs in the main conversation and spawns the subagents in parallel.
+**Naming firms** — each carries that studio's distilled framework + case studies:
+
+| Studio | Approach | Modeled on |
+| --- | --- | --- |
+| **Lexicon** | Sound symbolism & invented words | Pentium, Sonos, Swiffer |
+| **Catchword** | Vocabulary, volume & storytelling | Asana, Upwork |
+| **Tanj** | Strategy-first; map a real word onto the truth | Wii, Ally, Juke |
+| **Landor** | Positioning-first; elastic & systemic | FedEx, Enactus |
+| **Igor** | Evocative provocations; find the open quadrant | Aria, truTV, WHOOP |
+
+**Founder & portfolio playbooks** — for impact and moonshot ventures:
+
+| Studio | Approach | Modeled on |
+| --- | --- | --- |
+| **Google X** | Mission-as-name; nature / Earth / myth roots; optimistic, planetary-scale | Waymo, Verily, Wing, Mineral |
+| **Musk** | Short, punchy, category-defying; "sounds simple, means something bigger" | Tesla, SpaceX, Neuralink |
+| **YC** | Brandable, .com-able, fundable startup names that ship tomorrow | Stripe, Brex, Vanta, Retool |
+
+**Essence** — the on-the-nose baseline (core verbs + feelings), run first so the obvious word is never silently skipped, and used to seed roots for the rest.
+
+### 2. Evaluators — three first-principles lenses score every candidate
+
+- **Phonetics** — does the sound symbolism match the desired feeling?
+- **Linguistics** — construction, syllables, spell-ability & say-ability.
+- **Psychology** — cognitive fluency, distinctiveness vs. rivals, how it ages.
+
+### 3. Screener
+
+- **Availability** — domain, trademark, and cross-language collision signals.
+
+Candidates get a composite score (with a cross-school agreement bonus and an essence-coverage gate), are screened, and ranked into a final shortlist.
 
 ## Structure
 ```
@@ -20,7 +48,7 @@ SKILL.md                                   # the orchestrator skill (source copy
 reference/                                 # deep reference, loaded on demand
   firm-frameworks.md  naming-science.md  scoring-rubric.md
 .claude/
-  agents/*.md                              # the 10 subagents
+  agents/*.md                              # the 13 subagents (9 generators · 3 lenses · 1 screener)
   skills/product-naming/                   # installed (project-scoped) copy
     SKILL.md  reference/  assets/cards-template.html
 output/top-names.html                      # example rendered card deck
@@ -46,9 +74,13 @@ Then run `/reload-plugins` (or restart Claude Code) so it picks up the new skill
 
 ## Use
 Just ask in natural language — the skill auto-triggers on naming requests:
-> "Help me name a B2B AI agent that automates finance-team workflows."
+> "Name an AI tutor that helps people pass hard professional certifications."
+>
+> "Name a low-cost diagnostic that detects malaria from a phone photo."
+>
+> "Name a swarm of autonomous robots that map and restore coral reefs."
 
-Or invoke explicitly: `/product-naming a calm sleep-tracking app for new parents`
+Or invoke explicitly: `/product-naming a fusion reactor startup chasing net-positive energy`
 
 Claude collects a short brief, runs the panel, and returns a ranked shortlist. Say **"quick mode"** to skip the interview, or paste your own list of names to only evaluate/screen them. Ask for a **card deck** to render the top picks as the flip-card visual above (`assets/cards-template.html`) — front shows the name, tap to flip for meaning + score bars, with a studio explorer below.
 

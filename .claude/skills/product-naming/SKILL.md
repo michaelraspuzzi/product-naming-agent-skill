@@ -1,6 +1,6 @@
 ---
 name: product-naming
-description: Names products, brands, apps, SaaS, features, and open-source projects by running a panel of subagents modeled on the top US naming firms (Lexicon, Catchword, Tanj, Landor, Igor) plus an essence baseline and first-principles linguistics/phonetics/psychology lenses, then screening availability and delivering a ranked shortlist with rationale. Use when the user needs a product name, brand name, company name, or asks to brainstorm/evaluate names.
+description: Names products, brands, apps, SaaS, features, and open-source projects by running a panel of subagents modeled on the top US naming firms (Lexicon, Catchword, Tanj, Landor, Igor) and on founder/portfolio naming schools (Google X moonshots, Elon Musk's companies, top YC startups), plus an essence baseline and first-principles linguistics/phonetics/psychology lenses, then screening availability and delivering a ranked shortlist with rationale. Use when the user needs a product name, brand name, company name, or asks to brainstorm/evaluate names.
 ---
 
 # Product Naming
@@ -16,16 +16,19 @@ Never generate before you have a brief. Ask only the few questions that matter; 
 
 Write a 4-6 line brief; confirm it or proceed on stated assumptions.
 
-## Phase 2 — GENERATE (6 agents, parallel)
-Spawn all six with the brief verbatim:
+## Phase 2 — GENERATE (9 agents, parallel)
+Spawn all nine with the brief verbatim. Six **firm** schools + three **founder/portfolio** schools:
 - `namer-essence` — **runs first conceptually**: the on-the-nose baseline (core verbs + feelings + literal names) so the obvious word is never skipped, and seed roots for the rest.
 - `namer-lexicon` — sound-symbolism, invented, name-the-experience, embrace polarization.
 - `namer-catchword` — vocabulary + volume, storytelling, globally pronounceable.
 - `namer-tanj` — strategy-first Construct×Expression×Tone; map a real word's meaning onto the truth; anti-trend.
 - `namer-landor` — positioning-first, 8 Principles, elastic/meaning-rich, nomenclature-aware.
 - `namer-igor` — evocative-or-bust, provocations, open quadrant, anti-"Happy Idiot."
+- `namer-googlex` — moonshot-as-name, nature/Earth/myth roots + warm mission-coinages + honest lab codenames; optimistic, planetary-scale, elastic.
+- `namer-musk` — short/punchy/category-defying; single word-or-letter, compound concept, absurdly-literal, inventor homage; "sounds simple, means something bigger."
+- `namer-yc` — brandable-but-legible startup names; modified real words, two-noun compounds, verb-mashes, suffix coinages; .com-able, fundable, ships-tomorrow.
 
-Pool (~100), **dedupe**, drop hard-constraint violations. Keep source firm + reasoning on each survivor.
+Pool (~150), **dedupe**, drop hard-constraint violations. Keep source school + reasoning on each survivor.
 
 ## Phase 3 — EVALUATE (3 lenses, parallel)
 Pass the deduped list + brief to all three:

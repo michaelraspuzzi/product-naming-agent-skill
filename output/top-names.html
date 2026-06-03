@@ -53,32 +53,37 @@
   .rlab{color:var(--muted);letter-spacing:.02em}
   .rval{font-family:"Instrument Serif",serif;font-size:17px;color:var(--c)}
   .track{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
-  .fill{height:100%;border-radius:99px;width:var(--w);transform:scaleX(0);transform-origin:left center;
-    transition:transform .95s cubic-bezier(.2,.85,.2,1);background:linear-gradient(90deg,var(--c),#fff6df)}
-  .card.flip .fill{transform:scaleX(1)}
+  .fill{height:100%;border-radius:99px;width:var(--w);background:linear-gradient(90deg,var(--c),#fff6df)}
 
   /* studio explorer */
   .studios{padding:8px 38px 64px}
   .shead{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin:26px 0 18px;
     display:flex;align-items:center;gap:12px}
   .shead::after{content:"";flex:1;height:1px;background:var(--line)}
-  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px}
-  .studio{border:1px solid var(--line);border-radius:16px;padding:18px;
+  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px;align-items:start}
+  .studio{border:1px solid var(--line);border-radius:16px;
     background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012))}
-  .studio h4{font-family:"Instrument Serif",serif;font-weight:400;font-size:23px;margin:0;color:var(--c)}
-  .studio .tag{font-size:11.5px;color:var(--muted);margin:3px 0 13px;line-height:1.45}
-  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .studio>summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:center;
+    justify-content:space-between;gap:12px;transition:.2s}
+  .studio>summary::-webkit-details-marker{display:none}
+  .studio>summary:hover{background:rgba(255,255,255,.03)}
+  .sname{display:flex;align-items:center;gap:10px;min-width:0}
+  .caret{color:var(--muted);font-size:13px;transition:transform .2s}
+  .studio[open] .caret{transform:rotate(90deg)}
+  .studio h4{font-family:"Instrument Serif",serif;font-weight:400;font-size:22px;margin:0;color:var(--c)}
+  .scount{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 9px;flex:none}
+  .studio .tag{font-size:11.5px;color:var(--muted);margin:0;padding:0 18px;line-height:1.45}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;padding:12px 18px 18px}
   .chip{font-size:12.5px;padding:5px 11px;border-radius:99px;border:1px solid var(--line);
     color:#d7d9ea;background:rgba(255,255,255,.03);transition:.2s}
   .chip:hover{border-color:var(--c);color:#fff;background:rgba(255,255,255,.08);transform:translateY(-1px)}
   .chip.pick{border-color:var(--c);color:var(--c);box-shadow:0 0 14px -2px var(--c)}
-  .foot{padding:0 38px 50px;color:var(--muted);font-size:12px;line-height:1.6;max-width:90ch}
 
   @media (max-width:880px){
     .top{flex-direction:column;gap:8px}
     .deck{height:auto;min-height:0;grid-template-columns:1fr;grid-template-rows:none;gap:18px;padding:0 18px 26px}
     .scene{aspect-ratio:16/8.6}
-    .studios,.foot{padding-left:18px;padding-right:18px}
+    .studios{padding-left:18px;padding-right:18px}
     .name{font-size:clamp(38px,11vw,62px)}
   }
   @media (max-width:520px){
@@ -99,7 +104,6 @@
     <div class="shead">Explore by studio</div>
     <div class="sgrid" id="studios"></div>
   </section>
-  <div class="foot">Five naming-firm schools + an essence baseline generated ~140 candidates across two rounds; three first-principles lenses scored them and an availability pass screened the finalists. <b style="color:#cfd2e6">Highlighted chips</b> made the top 4. Availability is a best-effort screening signal — not legal clearance. Run a formal USPTO/TESS search (classes 9 / 41 / 42) before committing.</div>
 
 <script>
   const PICKS = ["En Passant","Certo","Passage","Certify"];
@@ -141,15 +145,22 @@
       names:["Certify","Pass","Prove","Master","Ace","Qualify","Ready","Certain"] }
   ];
 
+  // each rating dimension gets its own color so the bars read at a glance
+  const SKILL_COLORS = {
+    "Meaning":"#e7c873", "Distinctiveness":"#9ad0f5", "Sound":"#c9a8f0",
+    "Say & spell":"#f0a98f", "Availability":"#8fe6c0"
+  };
+  const alphaHex = a => Math.round(Math.max(0,Math.min(1,a))*255).toString(16).padStart(2,'0');
   const fmt = v => v % 1 ? v.toFixed(1) : String(v);
   const deck = document.getElementById('deck');
   CARDS.forEach(c=>{
     const scene=document.createElement('div'); scene.className='scene';
-    const bars=c.ratings.map(r=>{const p=r.value/5;
+    const bars=c.ratings.map(r=>{const p=r.value/5; const col=SKILL_COLORS[r.label]||c.c;
       return `<div class="rrow"><div class="rtop"><span class="rlab">${r.label}</span>
-        <span class="rval">${fmt(r.value)}</span></div>
+        <span class="rval" style="color:${col}">${fmt(r.value)}</span></div>
         <div class="track"><span class="fill" style="--w:${(p*100).toFixed(0)}%;
-          box-shadow:0 0 ${(p*26).toFixed(0)}px rgba(231,200,115,${p.toFixed(2)})"></span></div></div>`;}).join('');
+          background:linear-gradient(90deg,${col},#fff6df);
+          box-shadow:0 0 ${(p*26).toFixed(0)}px ${col}${alphaHex(p)}"></span></div></div>`;}).join('');
     scene.innerHTML=`
       <div class="card" style="--c:${c.c}">
         <div class="face front"><div class="glow"></div><div class="rankwm">${c.rank}</div>
@@ -168,8 +179,8 @@
   const studios=document.getElementById('studios');
   STUDIOS.forEach(s=>{
     const chips=s.names.map(n=>`<span class="chip${PICKS.includes(n)?' pick':''}">${n}</span>`).join('');
-    const el=document.createElement('div'); el.className='studio'; el.style.setProperty('--c',s.c);
-    el.innerHTML=`<h4>${s.name}</h4><div class="tag">${s.tag}</div><div class="chips">${chips}</div>`;
+    const el=document.createElement('details'); el.className='studio'; el.style.setProperty('--c',s.c);
+    el.innerHTML=`<summary><span class="sname"><span class="caret">▸</span><h4>${s.name}</h4></span><span class="scount">${s.names.length}</span></summary><div class="tag">${s.tag}</div><div class="chips">${chips}</div>`;
     studios.appendChild(el);
   });
 </script>
