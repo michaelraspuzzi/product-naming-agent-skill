@@ -130,17 +130,71 @@
 
   const STUDIOS = [
     { name:"Lexicon", c:"#e7c873", tag:"Sound symbolism · invented words · name the experience",
-      names:["Stropp","Keend","Aciem","Brink","Tactus","Certo","Honos","Verdic"] },
+      names:[
+        {n:"Stropp", note:"From “strop” — the leather strap that hones a blade to its edge."},
+        {n:"Keend", note:"Coined from “keen”: sharpened, eager, exam-ready."},
+        {n:"Aciem", note:"Latin acies — the sharp edge and the battle line."},
+        {n:"Brink", note:"The charged edge right before the breakthrough."},
+        {n:"Tactus", note:"Latin “touch” — tactical command of the material."},
+        {n:"Certo", note:"Italian “certainly” — the sound of mastery, hides “cert.”"},
+        {n:"Honos", note:"Latin “honor,” and an echo of “hone.”"},
+        {n:"Verdic", note:"Clipped “verdict” — the moment of the pass/fail call."}
+      ] },
     { name:"Catchword", c:"#9ad0f5", tag:"Vocabulary + volume · storytelling · globally pronounceable",
-      names:["Certa","Certo","Summa","Acumen","Compass","Passage","Certain","Vetto"] },
+      names:[
+        {n:"Certa", note:"Feminine Latin “certain” — clean and globally legible."},
+        {n:"Certo", note:"Italian “of course” — confident, earned mastery."},
+        {n:"Summa", note:"Summa cum laude — top of the class."},
+        {n:"Acumen", note:"Sharp professional judgment under pressure."},
+        {n:"Compass", note:"Orients a candidate straight to the credential."},
+        {n:"Passage", note:"The rite of passage past the exam."},
+        {n:"Certain", note:"The plain feeling of knowing you’ll pass."},
+        {n:"Vetto", note:"Playful coin on “vet / vetted.”"}
+      ] },
     { name:"Tanj", c:"#c9a8f0", tag:"Strategy-first · map a real word onto the truth · anti-trend",
-      names:["Hone","Keen","Mettle","Temper","Compass","Passkey","Certitude","Adept"] },
+      names:[
+        {n:"Hone", note:"Sharpen a skill to a fine, reliable edge."},
+        {n:"Keen", note:"Sharp, eager, primed for the test."},
+        {n:"Mettle", note:"Character proven under exam pressure."},
+        {n:"Temper", note:"Strengthened through trial, like steel."},
+        {n:"Compass", note:"A sense of direction toward certification."},
+        {n:"Passkey", note:"The key that unlocks the pass."},
+        {n:"Certitude", note:"Total, earned confidence in the result."},
+        {n:"Adept", note:"The expert you become on the other side."}
+      ] },
     { name:"Landor", c:"#f0a98f", tag:"Positioning-first · 8 principles · elastic & systemic",
-      names:["Hone","Forte","Proof","Lodestar","Whetline","Crucible","Passage","Aegis"] },
+      names:[
+        {n:"Hone", note:"Refine raw skill into mastery."},
+        {n:"Forte", note:"Your strength — musical and personal."},
+        {n:"Proof", note:"Demonstrated, verified competence."},
+        {n:"Lodestar", note:"The guiding star toward the goal."},
+        {n:"Whetline", note:"Coined — the line where skills get whetted sharp."},
+        {n:"Crucible", note:"The trial that forges a certified pro."},
+        {n:"Passage", note:"Crossing from candidate to certified."},
+        {n:"Aegis", note:"The protection and authority of credentials."}
+      ] },
     { name:"Igor", c:"#8fe6c0", tag:"Evocative-or-bust · provocations · find the open quadrant",
-      names:["En Passant","Forge","Crucible","Compass","Concerto","Quench","Passkey","Certain"] },
+      names:[
+        {n:"En Passant", note:"Chess’s hidden capture — “in passing,” conceals “pass.”"},
+        {n:"Forge", note:"Where raw skill is hammered into mastery."},
+        {n:"Crucible", note:"The intense test that transforms you."},
+        {n:"Compass", note:"Orientation toward the credential."},
+        {n:"Concerto", note:"Mastery performed — “cert” hidden inside."},
+        {n:"Quench", note:"The blade’s final temper; the relief of passing."},
+        {n:"Passkey", note:"Unlocks the pass."},
+        {n:"Certain", note:"The confidence of guaranteed readiness."}
+      ] },
     { name:"Essence", c:"#f0c84b", tag:"The on-the-nose baseline · core verbs + feelings",
-      names:["Certify","Pass","Prove","Master","Ace","Qualify","Ready","Certain"] }
+      names:[
+        {n:"Certify", note:"The literal verb — formally confirm competence."},
+        {n:"Pass", note:"The single outcome everyone is after."},
+        {n:"Prove", note:"Demonstrate that you truly know it."},
+        {n:"Master", note:"Full command of the material."},
+        {n:"Ace", note:"Top the exam outright."},
+        {n:"Qualify", note:"Clear the bar."},
+        {n:"Ready", note:"Fully prepared to sit the test."},
+        {n:"Certain", note:"Sure you’ll pass."}
+      ] }
   ];
 
   // each rating dimension gets its own color so the bars read at a glance
@@ -176,9 +230,9 @@
 
   const studios=document.getElementById('studios');
   STUDIOS.forEach(s=>{
-    const chips=s.names.map(n=>`<span class="chip${PICKS.includes(n)?' pick':''}">${n}</span>`).join('');
+    const rows=s.names.map(it=>`<div class="nrow${PICKS.includes(it.n)?' pick':''}"><span class="nm">${it.n}</span><span class="nnote">${it.note}</span></div>`).join('');
     const el=document.createElement('details'); el.className='studio'; el.style.setProperty('--c',s.c);
-    el.innerHTML=`<summary><span class="sname"><span class="caret">▸</span><h4>${s.name}</h4></span><span class="scount">${s.names.length}</span></summary><div class="tag">${s.tag}</div><div class="chips">${chips}</div>`;
+    el.innerHTML=`<summary><span class="sname"><span class="caret">▸</span><h4>${s.name}</h4><span class="htag">${s.tag}</span></span><span class="scount">${s.names.length}</span></summary><div class="nlist">${rows}</div>`;
     studios.appendChild(el);
   });
 </script>
