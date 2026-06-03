@@ -3,10 +3,13 @@
   product-naming flip-card deck — TEMPLATE
   Copy to output/, then replace CARDS, STUDIOS, PICKS, KICKER below with the run's data.
   Front shows ONLY the name. Click flips to reveal meaning + rating bars.
-  Bars fill via pure CSS (scaleX keyed to .flip) to their exact % and glow in proportion
-  to score (value/5): a 3/5 bar fills 60% and glows at 60%. Match the glow rgba() to accent if recolored.
-  Below the deck, the "Explore by studio" grid lists each firm's shortlist as chips;
-  chips whose name is in PICKS are highlighted as finalists.
+  Each rating bar fills to its exact % (value/5: a 3/5 bar fills 60%) and is colored per
+  dimension via SKILL_COLORS in the script; the glow alpha tracks the score. Bars are
+  statically filled to their width (no animation) so they render reliably in screenshots.
+  Below the deck, the "Shortlist" section is a single vertical list of collapsible <details>,
+  one per firm: the studio name + tag + count show by default; click to toggle open a
+  single-column list of its names, each with a one-line gloss (its own note, not the tag).
+  Names in PICKS are starred and accent-colored as finalists.
   Layout: full-screen 2x2 first screen, studios scroll below; collapses to a stacked list on narrow screens.
 -->
 <html lang="en">
@@ -25,8 +28,6 @@
       radial-gradient(900px 700px at 108% 4%,#3a1840 0,transparent 52%),#06060d;}
   .top{padding:22px 38px 14px;display:flex;align-items:baseline;justify-content:space-between;gap:20px}
   .kicker{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
-  .legend{font-size:11.5px;color:var(--muted);display:flex;gap:16px}
-  .legend span{display:flex;align-items:center;gap:6px}
   .dot{width:7px;height:7px;border-radius:50%}
   .clear{background:#5ce6a8}.caution{background:#f0c84b}.contested{background:#f0726e}
   .deck{height:calc(100vh - 76px);min-height:520px;display:grid;grid-template-columns:1fr 1fr;
@@ -58,20 +59,27 @@
   .rtop{display:flex;justify-content:space-between;align-items:baseline;font-size:12px}
   .rlab{color:var(--muted)} .rval{font-family:"Instrument Serif",serif;font-size:17px;color:var(--c)}
   .track{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
-  .fill{height:100%;border-radius:99px;width:var(--w);transform:scaleX(0);transform-origin:left center;
-    transition:transform .95s cubic-bezier(.2,.85,.2,1);background:linear-gradient(90deg,var(--c),#fff6df)}
-  .card.flip .fill{transform:scaleX(1)}
+  .fill{height:100%;border-radius:99px;width:var(--w);background:linear-gradient(90deg,var(--c),#fff6df)}
   .studios{padding:8px 38px 64px}
   .shead{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin:26px 0 18px;display:flex;align-items:center;gap:12px}
   .shead::after{content:"";flex:1;height:1px;background:var(--line)}
-  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px}
-  .studio{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012))}
-  .studio h4{font-family:"Instrument Serif",serif;font-weight:400;font-size:23px;margin:0;color:var(--c)}
-  .studio .tag{font-size:11.5px;color:var(--muted);margin:3px 0 13px;line-height:1.45}
-  .chips{display:flex;flex-wrap:wrap;gap:7px}
-  .chip{font-size:12.5px;padding:5px 11px;border-radius:99px;border:1px solid var(--line);color:#d7d9ea;background:rgba(255,255,255,.03);transition:.2s}
-  .chip:hover{border-color:var(--c);color:#fff;background:rgba(255,255,255,.08);transform:translateY(-1px)}
-  .chip.pick{border-color:var(--c);color:var(--c);box-shadow:0 0 14px -2px var(--c)}
+  .sgrid{display:flex;flex-direction:column;gap:12px;max-width:780px}
+  .studio{border:1px solid var(--line);border-radius:16px;background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012))}
+  .studio>summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.2s}
+  .studio>summary::-webkit-details-marker{display:none}
+  .studio>summary:hover{background:rgba(255,255,255,.03)}
+  .sname{display:flex;align-items:baseline;gap:10px;min-width:0}
+  .caret{color:var(--muted);font-size:13px;transition:transform .2s}
+  .studio[open] .caret{transform:rotate(90deg)}
+  .studio h4{font-family:"Instrument Serif",serif;font-weight:400;font-size:22px;margin:0;color:var(--c)}
+  .studio .htag{font-size:11.5px;color:var(--muted)}
+  .scount{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 9px;flex:none}
+  .nlist{display:flex;flex-direction:column;padding:2px 18px 14px}
+  .nrow{display:flex;gap:14px;align-items:baseline;padding:10px 2px;border-top:1px solid var(--line)}
+  .nrow .nm{font-family:"Instrument Serif",serif;font-size:19px;line-height:1.2;color:#e7e5de;flex:none;min-width:118px}
+  .nrow .nnote{font-size:12.5px;line-height:1.45;color:var(--muted)}
+  .nrow.pick .nm{color:var(--c)}
+  .nrow.pick::before{content:"★";color:var(--c);font-size:11px;align-self:center;margin-left:-12px}
   @media (max-width:880px){.top{flex-direction:column;gap:8px}
     .deck{height:auto;min-height:0;grid-template-columns:1fr;grid-template-rows:none;gap:18px;padding:0 18px 26px}
     .scene{aspect-ratio:16/8.6}.studios{padding-left:18px;padding-right:18px}.name{font-size:clamp(38px,11vw,62px)}}
@@ -85,19 +93,21 @@
     <span class="legend"><span><i class="dot clear"></i>Clear</span><span><i class="dot caution"></i>Caution</span><span><i class="dot contested"></i>Contested</span></span>
   </div>
   <main class="deck" id="deck"></main>
-  <section class="studios"><div class="shead">Explore by studio</div><div class="sgrid" id="studios"></div></section>
+  <section class="studios"><div class="shead">Shortlist</div><div class="sgrid" id="studios"></div></section>
 <script>
   // ---- REPLACE THIS DATA PER RUN ----
   const KICKER = "Product Naming · Ranked Shortlist";
-  const PICKS = ["Example"]; // names that made the top cards (highlighted in studio chips)
+  const PICKS = ["Example"]; // names that made the top cards (highlighted in the studio list)
   const CARDS = [
     { rank:1, name:"Example", embed:"embeds · root", score:88, verdict:"clear", c:"#e7c873",
       meaning:"What the word means and why it fits the strategy.",
       verdictText:"Availability note + caveat.",
       ratings:[{label:"Meaning",value:5},{label:"Distinctiveness",value:5},{label:"Sound",value:4},{label:"Say & spell",value:3},{label:"Availability",value:5}] }
   ];
+  // Each studio's names is a list of {n, note}; note is ONE line on what that specific name means (not the tag).
   const STUDIOS = [
-    { name:"Lexicon", c:"#e7c873", tag:"Sound symbolism · invented · name the experience", names:["Example"] },
+    { name:"Lexicon", c:"#e7c873", tag:"Sound symbolism · invented · name the experience",
+      names:[{n:"Example", note:"One line on what this specific name means and why it fits."}] },
     { name:"Catchword", c:"#9ad0f5", tag:"Vocabulary + volume · storytelling · global", names:[] },
     { name:"Tanj", c:"#c9a8f0", tag:"Strategy-first · real-word mapping · anti-trend", names:[] },
     { name:"Landor", c:"#f0a98f", tag:"Positioning-first · 8 principles · elastic", names:[] },
@@ -106,15 +116,22 @@
   ];
   // -----------------------------------
   document.getElementById('kicker').textContent = KICKER;
+  // each rating dimension gets its own color so the bars read at a glance
+  const SKILL_COLORS = {
+    "Meaning":"#e7c873", "Distinctiveness":"#9ad0f5", "Sound":"#c9a8f0",
+    "Say & spell":"#f0a98f", "Availability":"#8fe6c0"
+  };
+  const alphaHex = a => Math.round(Math.max(0,Math.min(1,a))*255).toString(16).padStart(2,'0');
   const fmt = v => v % 1 ? v.toFixed(1) : String(v);
   const deck=document.getElementById('deck');
   CARDS.forEach(c=>{
     const scene=document.createElement('div'); scene.className='scene';
-    const bars=c.ratings.map(r=>{const p=r.value/5;
+    const bars=c.ratings.map(r=>{const p=r.value/5; const col=SKILL_COLORS[r.label]||c.c;
       return `<div class="rrow"><div class="rtop"><span class="rlab">${r.label}</span>
-        <span class="rval">${fmt(r.value)}</span></div>
+        <span class="rval" style="color:${col}">${fmt(r.value)}</span></div>
         <div class="track"><span class="fill" style="--w:${(p*100).toFixed(0)}%;
-          box-shadow:0 0 ${(p*26).toFixed(0)}px rgba(231,200,115,${p.toFixed(2)})"></span></div></div>`;}).join('');
+          background:linear-gradient(90deg,${col},#fff6df);
+          box-shadow:0 0 ${(p*26).toFixed(0)}px ${col}${alphaHex(p)}"></span></div></div>`;}).join('');
     scene.innerHTML=`
       <div class="card" style="--c:${c.c}">
         <div class="face front"><div class="glow"></div><div class="rankwm">${c.rank}</div>
@@ -131,9 +148,9 @@
   });
   const studios=document.getElementById('studios');
   STUDIOS.forEach(s=>{
-    const chips=s.names.map(n=>`<span class="chip${PICKS.includes(n)?' pick':''}">${n}</span>`).join('');
-    const el=document.createElement('div'); el.className='studio'; el.style.setProperty('--c',s.c);
-    el.innerHTML=`<h4>${s.name}</h4><div class="tag">${s.tag}</div><div class="chips">${chips}</div>`;
+    const rows=s.names.map(it=>`<div class="nrow${PICKS.includes(it.n)?' pick':''}"><span class="nm">${it.n}</span><span class="nnote">${it.note}</span></div>`).join('');
+    const el=document.createElement('details'); el.className='studio'; el.style.setProperty('--c',s.c);
+    el.innerHTML=`<summary><span class="sname"><span class="caret">▸</span><h4>${s.name}</h4><span class="htag">${s.tag}</span></span><span class="scount">${s.names.length}</span></summary><div class="nlist">${rows}</div>`;
     studios.appendChild(el);
   });
 </script>
