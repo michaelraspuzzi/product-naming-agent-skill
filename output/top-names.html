@@ -15,8 +15,6 @@
       radial-gradient(900px 700px at 108% 4%,#3a1840 0,transparent 52%),#06060d;}
   .top{padding:22px 38px 14px;display:flex;align-items:baseline;justify-content:space-between;gap:20px}
   .kicker{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
-  .legend{font-size:11.5px;color:var(--muted);display:flex;gap:16px}
-  .legend span{display:flex;align-items:center;gap:6px}
   .dot{width:7px;height:7px;border-radius:50%}
   .clear{background:#5ce6a8}.caution{background:#f0c84b}.contested{background:#f0726e}
 
@@ -60,24 +58,25 @@
   .shead{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin:26px 0 18px;
     display:flex;align-items:center;gap:12px}
   .shead::after{content:"";flex:1;height:1px;background:var(--line)}
-  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px;align-items:start}
+  .sgrid{display:flex;flex-direction:column;gap:12px;max-width:780px}
   .studio{border:1px solid var(--line);border-radius:16px;
     background:linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.012))}
   .studio>summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:center;
     justify-content:space-between;gap:12px;transition:.2s}
   .studio>summary::-webkit-details-marker{display:none}
   .studio>summary:hover{background:rgba(255,255,255,.03)}
-  .sname{display:flex;align-items:center;gap:10px;min-width:0}
+  .sname{display:flex;align-items:baseline;gap:10px;min-width:0}
   .caret{color:var(--muted);font-size:13px;transition:transform .2s}
   .studio[open] .caret{transform:rotate(90deg)}
   .studio h4{font-family:"Instrument Serif",serif;font-weight:400;font-size:22px;margin:0;color:var(--c)}
+  .studio .htag{font-size:11.5px;color:var(--muted)}
   .scount{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 9px;flex:none}
-  .studio .tag{font-size:11.5px;color:var(--muted);margin:0;padding:0 18px;line-height:1.45}
-  .chips{display:flex;flex-wrap:wrap;gap:7px;padding:12px 18px 18px}
-  .chip{font-size:12.5px;padding:5px 11px;border-radius:99px;border:1px solid var(--line);
-    color:#d7d9ea;background:rgba(255,255,255,.03);transition:.2s}
-  .chip:hover{border-color:var(--c);color:#fff;background:rgba(255,255,255,.08);transform:translateY(-1px)}
-  .chip.pick{border-color:var(--c);color:var(--c);box-shadow:0 0 14px -2px var(--c)}
+  .nlist{display:flex;flex-direction:column;padding:2px 18px 14px}
+  .nrow{display:flex;gap:14px;align-items:baseline;padding:10px 2px;border-top:1px solid var(--line)}
+  .nrow .nm{font-family:"Instrument Serif",serif;font-size:19px;line-height:1.2;color:#e7e5de;flex:none;min-width:118px}
+  .nrow .nnote{font-size:12.5px;line-height:1.45;color:var(--muted)}
+  .nrow.pick .nm{color:var(--c)}
+  .nrow.pick::before{content:"★";color:var(--c);font-size:11px;align-self:center;margin-left:-12px}
 
   @media (max-width:880px){
     .top{flex-direction:column;gap:8px}
@@ -96,12 +95,11 @@
 <body>
   <div class="top">
     <span class="kicker">Cert-Prep AI Tutor · Ranked Shortlist</span>
-    <span class="legend"><span><i class="dot clear"></i>Clear</span><span><i class="dot caution"></i>Caution</span><span><i class="dot contested"></i>Contested</span></span>
   </div>
   <main class="deck" id="deck"></main>
 
   <section class="studios">
-    <div class="shead">Explore by studio</div>
+    <div class="shead">Shortlist</div>
     <div class="sgrid" id="studios"></div>
   </section>
 

@@ -6,7 +6,7 @@
   Each rating bar fills to its exact % (value/5: a 3/5 bar fills 60%) and is colored per
   dimension via SKILL_COLORS in the script; the glow alpha tracks the score. Bars are
   statically filled to their width (no animation) so they render reliably in screenshots.
-  Below the deck, the "Explore by studio" grid lists each firm as a collapsible <details>:
+  Below the deck, the "Shortlist" grid lists each firm as a collapsible <details>:
   the studio name + count show by default, click to toggle open its shortlist chips;
   chips whose name is in PICKS are highlighted as finalists.
   Layout: full-screen 2x2 first screen, studios scroll below; collapses to a stacked list on narrow screens.
@@ -27,8 +27,6 @@
       radial-gradient(900px 700px at 108% 4%,#3a1840 0,transparent 52%),#06060d;}
   .top{padding:22px 38px 14px;display:flex;align-items:baseline;justify-content:space-between;gap:20px}
   .kicker{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
-  .legend{font-size:11.5px;color:var(--muted);display:flex;gap:16px}
-  .legend span{display:flex;align-items:center;gap:6px}
   .dot{width:7px;height:7px;border-radius:50%}
   .clear{background:#5ce6a8}.caution{background:#f0c84b}.contested{background:#f0726e}
   .deck{height:calc(100vh - 76px);min-height:520px;display:grid;grid-template-columns:1fr 1fr;
@@ -92,7 +90,7 @@
     <span class="legend"><span><i class="dot clear"></i>Clear</span><span><i class="dot caution"></i>Caution</span><span><i class="dot contested"></i>Contested</span></span>
   </div>
   <main class="deck" id="deck"></main>
-  <section class="studios"><div class="shead">Explore by studio</div><div class="sgrid" id="studios"></div></section>
+  <section class="studios"><div class="shead">Shortlist</div><div class="sgrid" id="studios"></div></section>
 <script>
   // ---- REPLACE THIS DATA PER RUN ----
   const KICKER = "Product Naming · Ranked Shortlist";
