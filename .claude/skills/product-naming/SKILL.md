@@ -49,7 +49,7 @@ Deliver the ranked shortlist:
 
 Keep school attribution visible. If the field is weak or availability-killed, loop back to Phase 2 with a sharpened brief rather than ship weak names.
 
-**Optional visual deliverable:** if the user wants a shareable artifact, render the top 3-5 as a flip-card deck from `assets/cards-template.html` (front = rank + name + essence + score; back = meaning + rating bars + availability). Fill in the data placeholders and write to an `output/` HTML file.
+**Visual deliverable (standard — render at end of every Full run):** after delivering the written shortlist, always render the top 3-5 as a flip-card deck from `assets/cards-template.html` and write it to `output/top-names.html` (overwrite). Front = rank + name; back = meaning + rating bars + availability verdict. Replace the `KICKER`, `PICKS`, `CARDS`, and `STUDIOS` data blocks with this run's data — include **all schools that ran** in `STUDIOS` (9 for a Full run), each name with a one-line gloss, picks starred. Each rating is 0-5 and its bar fills to `value/5` (a 3 → 60%). Then `open` the file so the user sees it. The deck is a 2×2 grid, so put the top **4** on cards and keep any 5th pick starred in the Shortlist. Skip only in Quick/Evaluate-only mode or if the user explicitly declines.
 
 ## Modes
 - **Quick:** state assumptions, run Phases 2-3, light screen, deliver top 5.

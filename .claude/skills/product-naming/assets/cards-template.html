@@ -59,7 +59,7 @@
   .rtop{display:flex;justify-content:space-between;align-items:baseline;font-size:12px}
   .rlab{color:var(--muted)} .rval{font-family:"Instrument Serif",serif;font-size:17px;color:var(--c)}
   .track{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
-  .fill{height:100%;border-radius:99px;width:var(--w);background:linear-gradient(90deg,var(--c),#fff6df)}
+  .fill{display:block;height:100%;border-radius:99px;width:var(--w);background:linear-gradient(90deg,var(--c),#fff6df)}
   .studios{padding:8px 38px 64px}
   .shead{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin:26px 0 18px;display:flex;align-items:center;gap:12px}
   .shead::after{content:"";flex:1;height:1px;background:var(--line)}
@@ -90,7 +90,6 @@
 <body>
   <div class="top">
     <span class="kicker" id="kicker">Product Naming · Ranked Shortlist</span>
-    <span class="legend"><span><i class="dot clear"></i>Clear</span><span><i class="dot caution"></i>Caution</span><span><i class="dot contested"></i>Contested</span></span>
   </div>
   <main class="deck" id="deck"></main>
   <section class="studios"><div class="shead">Shortlist</div><div class="sgrid" id="studios"></div></section>
